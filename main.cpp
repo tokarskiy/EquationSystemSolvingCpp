@@ -16,13 +16,13 @@ public:
 	/// <param name="range">Случайные числа будут в диапазоне {-range..+range}</param>
 	static void InitializeRandom(double coefficients[MATRIX_SIZE][MATRIX_SIZE], double free[MATRIX_SIZE], double range){
 		#pragma omp parallel for
-        for (int i=0; i < MATRIX_SIZE; i++){
-        	#pragma omp parallel for
-            for (int j=0; j < MATRIX_SIZE; j++){
-                coefficients[i][j] = range * (1.0-2.0*(double)rand()/RAND_MAX);
+        	for (int i=0; i < MATRIX_SIZE; i++){
+        		#pragma omp parallel for
+            		for (int j=0; j < MATRIX_SIZE; j++){
+                		coefficients[i][j] = range * (1.0-2.0*(double)rand()/RAND_MAX);
 			}
-            free[i] = range * (1.0 - 2.0 * (double)rand()/RAND_MAX);
-        }
+            		free[i] = range * (1.0 - 2.0 * (double)rand()/RAND_MAX);
+        	}
 	}
 };
 
@@ -68,13 +68,13 @@ public:
 	/// <param name="result">Вектор результата</param>
 	static void BackSubstitution(double coefficients[MATRIX_SIZE][MATRIX_SIZE], double free[MATRIX_SIZE], double result[MATRIX_SIZE]){
 		result[MATRIX_SIZE-1] = free[MATRIX_SIZE-1] / coefficients[MATRIX_SIZE-1][MATRIX_SIZE-1];
-        for(int i = MATRIX_SIZE - 2; i >= 0; i--){
-            double sum = 0.0;
-            for(int j = i + 1; j < MATRIX_SIZE; j++){
-                sum = sum + coefficients[i][j] * result[j];
-            }
-            result[i] = (free[i] - sum) / coefficients[i][i];
-        }
+	        for(int i = MATRIX_SIZE - 2; i >= 0; i--){
+	            double sum = 0.0;
+	            for(int j = i + 1; j < MATRIX_SIZE; j++){
+	                sum = sum + coefficients[i][j] * result[j];
+	            }
+	            result[i] = (free[i] - sum) / coefficients[i][i];
+	        }
 	}
 };
 
